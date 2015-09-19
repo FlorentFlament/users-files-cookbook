@@ -2,9 +2,9 @@
 begin
   search('users-files', '*:*').each do |user|
     user.to_hash['files'].each do |file, content|
-      file "#{user}/#{file}" do
+      file "#{user.id}/#{file}" do
         path lazy { File.join(node['etc']['passwd'][user.id]['dir'], file) }
-        content content.join("\n")
+        content content.join("\n") << "\n"
         owner user.id
         group user.id
         action :create_if_missing

@@ -1,9 +1,9 @@
 # Create users configuration files
 begin
   search('users-files', '*:*').each do |user|
-    home = node['etc']['passwd'][user.id]['dir']
     user.to_hash['files'].each do |file, content|
-      file File.join(home, file) do
+      file "#{user}/#{file}" do
+        path lazy { File.join(node['etc']['passwd'][user.id]['dir'], file) }
         content content.join("\n")
         owner user.id
         group user.id
